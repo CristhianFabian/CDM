@@ -2,47 +2,52 @@ package com.example.appgames;
 
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.appgames.databinding.ActivityMainBinding;
-
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+    private ListView lvGames;
+    private ArrayAdapter adapter;
+    private List<Game> listaDeGames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        lvGames = findViewById(R.id.lvGames);
+        carregarGames();
 
-        setSupportActionBar(binding.toolbar);
+        FloatingActionButton fab = findViewById(R.id.fab);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
             }
         });
+    }
+
+    private void carregarGames(){
+        Game g1 = new Game ("League of Legends", "MOBA");
+        Game g2 = new Game ("Mir4", "RPG");
+        Game g3 = new Game ("Ragnarok", "RPG");
+        listaDeGames = new ArrayList<>();
+        listaDeGames.add(g1);
+        listaDeGames.add(g2);
+        listaDeGames.add(g3);
+
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listaDeGames);
+        lvGames.setAdapter(adapter);
     }
 
     @Override
@@ -67,10 +72,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
 }
