@@ -1,5 +1,6 @@
 package com.example.appgames;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,19 +33,31 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intendt = new Intent(MainActivity.this, FormularioActivity.class);
+                startActivity(intendt);
 
             }
         });
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        carregarGames();
+    }
+
     private void carregarGames(){
-        Game g1 = new Game ("League of Legends", "MOBA");
-        Game g2 = new Game ("Mir4", "RPG");
-        Game g3 = new Game ("Ragnarok", "RPG");
-        listaDeGames = new ArrayList<>();
-        listaDeGames.add(g1);
-        listaDeGames.add(g2);
-        listaDeGames.add(g3);
+
+        listaDeGames = GameDAO.getJogos(this);
+
+        if(listaDeGames.size() == 0) {
+            Game fake = new Game("LISTA VAZIA...", "");
+            listaDeGames.add(fake);
+            lvGames.setEnabled(false);
+
+        }else{
+            lvGames.setEnabled(true);
+        }
 
         adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listaDeGames);
         lvGames.setAdapter(adapter);
